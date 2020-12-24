@@ -24,12 +24,7 @@ public class PersonController {
 
     @GetMapping("/persons")
     public List<Person> list(@RequestParam(value = "sort", required = false) Integer sort) {
-        List<Person> list = service.getAll();
-        // Sort is given -> then sort the list
-        if(sort != null) {
-            list.sort(Comparator.comparing(Person::getDateOfInfection));
-        }
-        return list;
+        return sort == null ? service.getAll() : service.getAllSortedByInfectionDate();
     }
 
     @GetMapping("/persons/{id}")
@@ -42,7 +37,7 @@ public class PersonController {
 
         // Person with given id NOT in DB
         Map<String, String> map = new HashMap<>();
-        map.put("message", "No such element with this id");
+        map.put("message", "No such element with this id.");
         return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
 
     }
@@ -58,7 +53,7 @@ public class PersonController {
 
         // Date is not valid
         Map<String, String> map = new HashMap<>();
-        map.put("message", "Date of recovery must be later than infection date");
+        map.put("message", "Date of recovery must be later than infection date.");
         return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
     }
 
@@ -76,12 +71,12 @@ public class PersonController {
             }
             // Date is not valid
             Map<String, String> map = new HashMap<>();
-            map.put("message", "Date of recovery must be later than infection date");
+            map.put("message", "Date of recovery must be later than infection date.");
             return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
         }
         // Candidate NOT exists in DB
         Map<String, String> map = new HashMap<>();
-        map.put("message", "No such element with this id");
+        map.put("message", "No such element with this id.");
         return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
     }
 
@@ -89,10 +84,10 @@ public class PersonController {
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         Map<String, String> map = new HashMap<>();
         if (!service.delete(id)) {
-            map.put("message", "No such element with this id");
+            map.put("message", "No such element with this id.");
             return new ResponseEntity<>(map, HttpStatus.NOT_FOUND);
         }
-        map.put("message", "Person record " + id + " has been deleted successfully");
+        map.put("message", "Person with ID: " + id + " has been deleted successfully.");
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 

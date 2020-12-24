@@ -22,6 +22,10 @@ public class PersonService {
         return repo.findAll();
     }
 
+    public List<Person> getAllSortedByInfectionDate() {
+        return repo.findAllByOrderByDateOfInfectionAsc();
+    }
+
     public void save(Person p) {
         repo.save(p);
     }

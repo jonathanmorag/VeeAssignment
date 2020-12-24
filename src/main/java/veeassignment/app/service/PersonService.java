@@ -1,6 +1,7 @@
 package veeassignment.app.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +32,14 @@ public class PersonService {
     }
 
     public Person get(Integer id) {
-        Optional<Person> candidate = repo.findById(id);
-        return candidate.orElse(null);
+        return repo.findById(id).get();
     }
 
-    public boolean delete(Integer id) {
+    public void delete(Integer id) {
         Optional<Person> candidate = repo.findById(id);
         if(candidate.isPresent()) {
             repo.deleteById(id);
-            return true;
         }
-        return false;
+        else throw new NoSuchElementException();
     }
 }

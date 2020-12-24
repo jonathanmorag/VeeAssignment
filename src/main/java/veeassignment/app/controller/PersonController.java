@@ -1,7 +1,6 @@
 package veeassignment.app.controller;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,12 +37,11 @@ public class PersonController {
     @PostMapping("/persons")
     public ResponseEntity<?> add(@RequestBody Person p) {
         // Check if ID already in DB
-        List<Person> list = service.getAll()
+        boolean exists = service.getAll()
                 .stream()
-                .filter(e -> e.getId().equals(p.getId()))
-                .collect(Collectors.toList());
+                .anyMatch(e -> e.getId().equals(p.getId()));
 
-        if (list.size() > 0) {
+        if (exists) {
             return new ResponseEntity<>("ID already exists in DB.", HttpStatus.BAD_REQUEST);
         }
 

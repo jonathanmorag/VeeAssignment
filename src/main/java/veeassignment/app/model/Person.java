@@ -1,4 +1,4 @@
-package veeassignment.app;
+package veeassignment.app.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

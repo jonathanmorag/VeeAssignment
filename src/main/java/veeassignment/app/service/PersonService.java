@@ -6,8 +6,6 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import veeassignment.app.dao.PersonRepository;
 import veeassignment.app.model.Person;
@@ -35,7 +33,7 @@ public class PersonService {
 
         if (exists) throw new IllegalAccessException("Person with this ID already exists in DB.");
 
-        if (!dateValidator(p.getDateOfInfection(), p.getDateOfRecovery())) {
+        if (!isValidDate(p.getDateOfInfection(), p.getDateOfRecovery())) {
             throw new IllegalArgumentException("Date of recovery must be later than infection date.");
         }
 
@@ -48,7 +46,7 @@ public class PersonService {
 
     public Person updateRecoveryDate(Date recoveryDate, Integer id) {
         Person p = this.get(id);
-        if(!dateValidator(p.getDateOfInfection(), recoveryDate)) {
+        if(!isValidDate(p.getDateOfInfection(), recoveryDate)) {
             throw new IllegalArgumentException("Date of recovery must be later than infection date.");
         }
         p.setDateOfRecovery(recoveryDate);
@@ -64,7 +62,8 @@ public class PersonService {
         else throw new NoSuchElementException();
     }
 
-    private static boolean dateValidator(Date infectionDate, Date recoveryDate) {
+    private static boolean isValidDate(Date infectionDate, Date recoveryDate) {
         return infectionDate.compareTo(recoveryDate) < 0;
     }
+
 }

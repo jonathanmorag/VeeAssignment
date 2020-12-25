@@ -20,8 +20,8 @@ public class PersonController {
     }
 
     @GetMapping("/persons")
-    public List<Person> list(@RequestParam(value = "sort", required = false) Integer sort) {
-        return sort == null ? service.getAll() : service.getAllSortedByInfectionDate();
+    public List<Person> list(@RequestParam Optional<Integer> sort) {
+        return sort.isEmpty() ? service.getAll() : service.getAllSortedByInfectionDate();
     }
 
     @GetMapping("/persons/{id}")
@@ -51,6 +51,8 @@ public class PersonController {
             return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

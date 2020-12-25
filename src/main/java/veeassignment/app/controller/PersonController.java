@@ -36,42 +36,19 @@ public class PersonController {
 
     @PostMapping("/persons")
     public ResponseEntity<?> add(@RequestBody Person p) {
-        // Check if ID already in DB
-        boolean exists = service.getAll()
-                .stream()
-                .anyMatch(e -> e.getId().equals(p.getId()));
-
-        if (exists) {
-            return new ResponseEntity<>("ID already exists in DB.", HttpStatus.BAD_REQUEST);
-        }
-
-        // Adding person - date validation (infection < recovery)
-        int comp = p.getDateOfInfection().compareTo(p.getDateOfRecovery());
-        if (comp < 0) {
+        try {
             service.save(p);
             return new ResponseEntity<>(p, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
-        // Date is not valid
-        return new ResponseEntity<>("Date of recovery must be later than infection date.",
-                HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/persons/{id}")
     public ResponseEntity<?> updateRecoveryDate(@RequestBody Person p, @PathVariable Integer id) {
         try {
-            Person candidate = service.get(id);
-
-            // Date validation (infection < recovery)
-            int comp = candidate.getDateOfInfection().compareTo(p.getDateOfRecovery());
-            if (comp < 0) {
-                candidate.setDateOfRecovery(p.getDateOfRecovery());
-                service.save(candidate);
-                return new ResponseEntity<>(candidate, HttpStatus.OK);
-            }
-            // Date is not valid
-            return new ResponseEntity<>("Date of recovery must be later than infection date.",
-                    HttpStatus.BAD_REQUEST);
+            Person updatedPerson = service.updateRecoveryDate(p.getDateOfRecovery(), id);
+            return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }

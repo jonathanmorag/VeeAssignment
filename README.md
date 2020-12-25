@@ -1,6 +1,8 @@
 # Vee Assignment
 Spring Boot Demo Covid-19 API using PostgreSQL.
 
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/fa61a785a105787111f2)
+
 ## Person Entity
 
 The Person class model has properties as:

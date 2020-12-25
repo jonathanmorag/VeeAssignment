@@ -35,10 +35,11 @@ public class PersonService {
 
         if (exists) throw new IllegalAccessException("Person with this ID already exists in DB.");
 
-        if (dateValidator(p.getDateOfInfection(), p.getDateOfRecovery())) {
-            repo.save(p);
+        if (!dateValidator(p.getDateOfInfection(), p.getDateOfRecovery())) {
+            throw new IllegalArgumentException("Date of recovery must be later than infection date.");
         }
-        else throw new IllegalArgumentException("Date of recovery must be later than infection date.");
+
+        repo.save(p);
     }
 
     public Person get(Integer id) {
@@ -47,7 +48,7 @@ public class PersonService {
 
     public Person updateRecoveryDate(Date recoveryDate, Integer id) {
         Person p = this.get(id);
-        if(dateValidator(p.getDateOfInfection(), recoveryDate)) {
+        if(!dateValidator(p.getDateOfInfection(), recoveryDate)) {
             throw new IllegalArgumentException("Date of recovery must be later than infection date.");
         }
         p.setDateOfRecovery(recoveryDate);

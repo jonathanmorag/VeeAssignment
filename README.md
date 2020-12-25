@@ -18,20 +18,20 @@ The Person class model has properties as:
 
 ```java
 // Get All Persons
-GET http://localhost:8080/persons
+GET localhost:8080/persons
 
 // Get All Persons (Sorted By Infection Date)
-GET http://localhost:8080/persons?sort=1
+GET localhost:8080/persons?sort=1
 
 // Get Person By Id
-GET http://localhost:8080/persons/{id}
+GET localhost:8080/persons/{id}
 
 // Add Person
-POST http://localhost:8080/persons
+POST localhost:8080/persons
 
 // Update Person's Recovery Date
-PUT http://localhost:8080/persons/{id}
+PUT localhost:8080/persons/{id}
 
 // Delete Person By Id
-DELETE http://localhost:8080/persons/{id}
+DELETE localhost:8080/persons/{id}
 ```
